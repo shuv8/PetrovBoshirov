@@ -10,7 +10,7 @@ def excel_to_csv(excelFile):
     #sheetName = 'Sheet'
     #sheet = wb.get_sheet_by_name(sheetName + '1')
 
-    csvFileName = excelFile.replace('.xlsx', '') + '.csv'
+    csvFileName = excelFile.replace('.xlsx', '.csv')
     your_csv_file = open(csvFileName, 'w')
     wr = csv.DictWriter(your_csv_file, fieldnames=fieldNames, delimiter=';')
     wr.writeheader()
