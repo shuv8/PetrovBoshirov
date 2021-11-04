@@ -1,5 +1,7 @@
 import openpyxl
 import csv
+import os
+import glob
 
 fieldNames = ['Sequence', 'Mrs/Ms', 'Name', 'Y/J', 'FlightNumber', 'DepartureCity', 'DepartureAirport', 'ArrivalCity', 'ArrivalAirport', 'Date', 'Time', 'Airline', 'Seat', 'PNR', 'E-ticket', 'BonusCard']
 
@@ -19,4 +21,10 @@ def excel_to_csv(excelFile):
 
     your_csv_file.close()
 
-excel_to_csv('YourBoardingPassDotAero/YourBoardingPassDotAero-2017-01-01.xlsx')
+excelFilesPath = 'C:\\Users\\plomb\\PycharmProjects\\pandas0\\YourBoardingPassDotAero'
+
+for fileName in glob.glob(os.path.join(excelFilesPath, '*.xlsx')):
+    print(fileName, '---Done')
+    excel_to_csv(fileName)
+
+#excel_to_csv('YourBoardingPassDotAero/YourBoardingPassDotAero-2017-01-01.xlsx')
