@@ -10,7 +10,7 @@ import numpy as np
 #print(data[1])
 
 
-with open(r'C:\Users\stari\Desktop\Универ\Дата\Airlines-All\Airlines\FrequentFlyerForum-Profiles.json') as FrequentFlyerForumProfiles_data:
+with open('FrequentFlyerForum-Profiles.json') as FrequentFlyerForumProfiles_data:
     data = json.load(FrequentFlyerForumProfiles_data)
 
 field_names_flights = ['NickName', 'Date', 'Codeshare', 'Dep_city', 'Dep_airport', 'Dep_country',
