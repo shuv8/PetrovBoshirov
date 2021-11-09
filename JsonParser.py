@@ -10,8 +10,8 @@ import numpy as np
 #print(data[1])
 
 
-with open('FrequentFlyerForum-Profiles.json') as FrequentFlyerForumProfiles_data:
-    data = json.load(FrequentFlyerForumProfiles_data)
+with open('FrequentFlyerForum-Profiles.json') as frequent_flyer_forum_profiles_data:
+    data = json.load(frequent_flyer_forum_profiles_data)
 
 field_names_flights = ['NickName', 'Date', 'Codeshare', 'Dep_city', 'Dep_airport', 'Dep_country',
               'Flight', 'Arrival_city', 'Arrival_airport', 'Arrival_county']
