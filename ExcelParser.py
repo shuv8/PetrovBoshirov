@@ -19,10 +19,10 @@ def excel_to_csv(excel_file):
 
     your_csv_file.close()
 
-excel_files_path = 'C:\\Users\\plomb\\PycharmProjects\\pandas0\\YourBoardingPassDotAero'
+excel_files_path = r'D:\Учеба\7 семестр\PetrovBoshirov\YourBoardingPassDotAero'
 
-#i = 1
+i = 1
 for file_name in glob.glob(os.path.join(excel_files_path, '*.xlsx')):
-    #print(fileName, '---Done---', (i/366)*100, '%')
-    #i += 1
+    print(file_name, '---Done---', (i/366)*100, '%')
+    i += 1
     excel_to_csv(file_name)
