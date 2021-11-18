@@ -15,6 +15,7 @@ def open_csv_file():
 
 def open_tab_file():
     tab_file = pd.read_fwf('Sirena-export-fixed.tab')
+    tab_file.rename(columns={'FlightCode': 'FlightNumber', 'TravelDoc': 'PassengerDocument'}, inplace=True)
     return tab_file
 
 def open_xml_file():
@@ -51,7 +52,8 @@ def open_json_file():
 
 csv_data = open_csv_file()
 xml_data = open_xml_file()
-excel_data = open_excel_file()
+#excel_data = open_excel_file()
+#tab_data = open_tab_file()
 
 csv_data.rename(columns={'PassengerFirstName': 'First name', 'PassengerLastName': 'Second name', 'PassengerSecondName': 'Middle name'}, inplace=True)
 xml_data.rename(columns={'Code': 'FlightNumber', 'Date': 'FlightDate'}, inplace=True)
@@ -71,10 +73,16 @@ people_list = pd.DataFrame(columns=['First name', 'Second name', 'PassengerDocum
 people_list = people_list.astype({"Number of flights": "float", "Number of bonus use": "float", "Percent of bonus use": "float"})
 #print(people_list.info())
 pre_stats = unique_docs.describe()
+unique_docs.plot(kind='hist')
+plt.show()
+print('####################################################################')
 print(pre_stats)
-i = 1
+print('####################################################################')
+print(csv_data['Destination'].value_counts())
+#i = 1
 test_df = boarding_data_with_bonus.sample(frac=0.01)
 #print(test_df.info())
+
 for psg in boarding_data_with_bonus['PassengerDocument'].unique():
     if unique_docs[psg] > pre_stats.at['max'] * 0.75:
         buf_df = boarding_data_with_bonus[boarding_data_with_bonus['PassengerDocument'] == psg]
@@ -82,8 +90,8 @@ for psg in boarding_data_with_bonus['PassengerDocument'].unique():
         buf_df = buf_df.reset_index()
         new_row = {'First name': buf_df.at[0, 'First name'], 'Second name': buf_df.at[0, 'Second name'], 'PassengerDocument': psg, 'Number of flights': unique_docs[psg], 'Number of bonus use': cards, 'Percent of bonus use': cards/unique_docs[psg]}
         people_list = people_list.append(new_row, ignore_index=True)
-        print('---Done---', (i / len(boarding_data_with_bonus['PassengerDocument'].unique())) * 100, '%')
-        i += 1
+        #print('---Done---', (i / len(boarding_data_with_bonus['PassengerDocument'].unique())) * 100, '%')
+        #i += 1
     else:
         pass
 print(people_list)
@@ -91,20 +99,31 @@ stats = people_list.describe()
 print(stats)
 bonus_stat = stats.at['25%', 'Percent of bonus use']
 spies_list = people_list[people_list['Percent of bonus use'] <= bonus_stat]
-print('####################################################################\n####################################################################')
-print(spies_list)
-#print(spies_list.info())
-# people_list.plot(x="Second name", y=["Number of flights", "Percent of bonus use"])
-# plt.show(
 
-karas = csv_data.loc[csv_data['PassengerDocument'] == '2244 645520']
-karas = karas.sort_values(by='FlightDate')
-print(karas)
-#
-#print(csv_data['Destination'].value_counts())
+csv_data = csv_data.loc[csv_data['PassengerDocument'].isin(spies_list['PassengerDocument'].tolist())]
+
+print('####################################################################')
+print(spies_list)
+print('####################################################################')
+for item in csv_data['PassengerBirthDate'].unique():
+    print(item)
+
+csv_data = csv_data.loc[~csv_data['PassengerDocument'].isin(['0931 650989', '6435 081994'])]
+spies_list = spies_list.loc[~spies_list['PassengerDocument'].isin(['0931 650989', '6435 081994'])]
+
+print('####################################################################')
+print(spies_list)
+spies_list = spies_list.reset_index()
+# print(csv_data)
+for i in spies_list['PassengerDocument'].tolist():
+    karas = csv_data.loc[csv_data['PassengerDocument'] == i][['FlightDate', 'FlightNumber', 'Destination']]
+    karas = karas.sort_values(by='FlightDate')
+    print('################', spies_list.loc[spies_list['PassengerDocument'] == i]['Second name'].tolist()[0],'#################')
+    print(karas)
+
+print('####################################################################')
+print(csv_data['Destination'].value_counts())
 # text = 'ЛЮБОВЬ КОЧЕРГИНА'
 # translit_ru = get_translit_function('ru')
 # translit_ru(text, reversed=True)
 #print(translit_ru(text, reversed=True))
-
-print(excel_data.loc[excel_data['Name'] == 'KOLOSOV SAMIR'])
